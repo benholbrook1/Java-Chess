@@ -51,6 +51,23 @@ public class Square {
         return piece;
     }
 
+    public static int[] getSquareWithCoords(String coordString) throws Exception{
+
+        if (coordString.length() != 2){
+            throw new Exception("Error, invalid coodinate given");
+        }
+
+        int y = Character.getNumericValue(coordString.charAt(1) - 1); 
+        int x = 0;
+
+        char c = coordString.charAt(0);
+        c = Character.toLowerCase(c);
+
+        x = c - 97;
+        
+        return new int[]{x,y};
+    }
+
     @Override
     public String toString(){
         

@@ -74,7 +74,7 @@ public class Board{
     public void newBoard(){
         
         for(int x = 0; x < BOARD_WIDTH; x++){
-            for(int y = 0; y < BOARD_HEIGHT; y++){
+            for(int y = BOARD_HEIGHT - 1; y >= 0; y--){
                 board[x][y] = new Square(x, y);
             }
         }
@@ -108,7 +108,7 @@ public class Board{
         sb.append("   ________________\n");
         for(int x = BOARD_WIDTH - 1; x >= 0; x--){
             sb.append(x + 1 + " ");
-            for (int y = BOARD_HEIGHT - 1; y >= 0; y--){
+            for (int y = 0; y < BOARD_HEIGHT; y++){
                 sb.append("|"+ board[y][x].toString());
             }
             sb.append("|\n");
