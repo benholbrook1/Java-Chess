@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.ArrayList;
+
 public class Square {
 
     private int xPos;
@@ -49,6 +51,16 @@ public class Square {
 
     public Piece getPiece(){
         return piece;
+    }
+
+    public boolean moveIsLegal(Move move, Board gameBoard){
+
+        ArrayList<Move> legalMoves = piece.getLegalMoves(gameBoard);
+
+        if (legalMoves.contains(move)){
+            return true;
+        }
+        return false;
     }
 
     public static int[] getSquareWithCoords(String coordString) throws Exception{

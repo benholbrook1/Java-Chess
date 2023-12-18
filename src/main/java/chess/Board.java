@@ -13,7 +13,7 @@ public class Board{
 
     public Board(){
         newBoard();
-        initPosition();
+        initPosition(START_POS);
     }
 
     // private methods
@@ -60,6 +60,8 @@ public class Board{
 
         // check if the move is legal using the [][].getValidMove... method of the piece
 
+        board[startX][startY].getPiece().setPosition(endX, endY);
+
         Square tempSquare = board[startX][startY];
         board[startX][startY] = board[endX][endY];
         board[endX][endY] = tempSquare;
@@ -71,6 +73,15 @@ public class Board{
         return board;
     }
 
+    public Square getSquare(int x, int y){
+        return board[x][y];
+    }
+
+    public boolean moveIsLegal(Move move){
+
+        return getSquare(move.getStartX(), move.getStartY()).moveIsLegal(move, this);
+    }
+
     public void newBoard(){
         
         for(int x = 0; x < BOARD_WIDTH; x++){
@@ -80,13 +91,13 @@ public class Board{
         }
     }
 
-    public void initPosition(){
+    public void initPosition(String fenString){
 
         int x = 0;
         int y = 0;
 
-        for (int i = 0; i < START_POS.length(); i++){
-            char c = START_POS.charAt(i);
+        for (int i = 0; i < fenString.length(); i++){
+            char c = fenString.charAt(i);
             if (c == '/'){
                 y++;
                 x = 0;

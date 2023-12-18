@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.ArrayList;
+
 public abstract class Piece {
 
     private int xPos;
@@ -50,16 +52,12 @@ public abstract class Piece {
         return colour;
     }
 
-    public boolean movePiece(int startX, int startY, int endX, int endY){
-
-        // check if move is legal
-
-        return true;
+    public void setPosition(int x, int y){
+        this.xPos = x;
+        this.yPos = y;
     }
-
-    //public abstract boolean movePiece(int startSquare, int endSquare);
     
-    // public abstract ?? getLegalMoves();
+    public abstract ArrayList<Move> getLegalMoves(Board gameBoard);
 
 
 

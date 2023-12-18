@@ -49,5 +49,18 @@ public class Move {
     public int getEndY(){
         return endY;
     }
+
+    @Override
+    public boolean equals(Object o){
+
+        Move c = (Move) o;
+
+        if(c.getStartX() != this.startX) return false;
+        if(c.getStartY() != this.startY) return false;
+        if(c.getEndX() != this.endX) return false;
+        if(c.getEndY() != this.endY) return false;
+
+        return true;
+    }
     
 }

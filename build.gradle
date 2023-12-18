@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'checkstyle'
+    //id 'checkstyle'
 }
 
 
@@ -12,10 +12,10 @@ repositories {
 //this configuration allows builds to continue even if there are
 //checkstyle errors or warnings.
 // change true to false to make checkstyle force you to fix things
-checkstyle {
-  ignoreFailures = true
+// checkstyle {
+//   ignoreFailures = true
  
-}
+// }
 
 jar {
     manifest {

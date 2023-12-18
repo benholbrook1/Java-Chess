@@ -14,11 +14,48 @@ public class TextUI {
         game = new ChessGame();
     }
 
+    // private methods
+
+    private void validateMoveString(String moveString) throws Exception{
+
+        if (moveString.equalsIgnoreCase("q")){
+            return;
+        }
+
+        if (moveString.length() != 4){
+            throw new Exception();
+        }
+
+        if (!Character.isLetter(moveString.charAt(0))){
+            throw new Exception();
+        } else if (!Character.isDigit(moveString.charAt(1))){
+            throw new Exception();
+        } else if (!Character.isLetter(moveString.charAt(2))){
+            throw new Exception();
+        } else if (!Character.isDigit(moveString.charAt(3))){
+            throw new Exception();
+        }
+
+    }
+
     // public methods
     public String getMove(){
         String move = "";
         System.out.printf("%s's turn, enter your move: ", game.getCurrentColour());
+        
         move = sc.next();
+        while(!move.equalsIgnoreCase("q")){
+
+            try {
+                validateMoveString(move);
+                break;
+            } catch (Exception ex){
+                System.out.println("\nInvalid Input. Try again.\n");
+                System.out.printf("%s's turn, enter your move: ", game.getCurrentColour());
+                move = sc.next();
+            }
+        }
+        
         
         return move;
     }
@@ -42,20 +79,20 @@ public class TextUI {
     public static void main(String[] args) {
 
         TextUI ui = new TextUI();
+        ui.clearScreen();
 
-        String move = "";
-        while(!move.equals("q")){
-            
+        String moveString = "";
+        while(!moveString.equals("q")){
+            //ui.clearScreen();
             ui.printGame();
-            move = ui.getMove();
+            moveString = ui.getMove();
             try{
-                ui.makeMove(move);
+                ui.makeMove(moveString);
             } catch (Exception ex){
-                if (!move.equals("q")){
+                if (!moveString.equals("q")){
                     System.out.println("Invalid Move!");
                 }
             }
-            ui.clearScreen();
         }
 
 

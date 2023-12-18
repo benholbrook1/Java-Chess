@@ -32,21 +32,17 @@ public class ChessGame{
     }
 
     
-    public void makeMove(String move) throws Exception{ // will probably have to change this when we are using the GUI
+    public void makeMove(String moveString) throws Exception{ // GUI might need a different sort of method
 
         // LEGAL MOVE = start square,endsquare
 
-        String[] moves = move.split(",");  // i dont like how this is implemented right now, id like to do this cleaner
+        Move move = new Move(moveString);
 
-        if (moves.length < 2){
-            throw new Exception("Invalid Move");
+        if (board.moveIsLegal(move)){
+            board.movePiece(move.getStartX(), move.getStartY(), move.getEndX(), move.getEndY());
+        } else {
+            throw new Exception();
         }
-
-        int[] firstSquare = Square.getSquareWithCoords(moves[0]);
-        int[] secondSquare = Square.getSquareWithCoords(moves[1]);
-
-        board.movePiece(firstSquare[0], firstSquare[1], secondSquare[0], secondSquare[1]);
-
 
     }
 
