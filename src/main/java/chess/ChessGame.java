@@ -16,6 +16,15 @@ public class ChessGame{
 
 
     // public methods
+
+    public void switchCurrentColour(){
+        if (currentColour == PieceColour.WHITE){
+            currentColour = PieceColour.BLACK;
+        } else {
+            currentColour = PieceColour.WHITE;
+        }
+    }
+
     public void newGame(){
 
         board = new Board();
@@ -36,8 +45,9 @@ public class ChessGame{
 
         Move move = new Move(moveString);
 
-        if (board.moveIsLegal(move)){
+        if (board.moveIsLegal(move, currentColour)){
             board.movePiece(move.getStartX(), move.getStartY(), move.getEndX(), move.getEndY());
+            switchCurrentColour();
         } else {
             throw new Exception();
         }

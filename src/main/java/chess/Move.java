@@ -6,22 +6,22 @@ public class Move {
     private int startY;
     private int endX;
     private int endY;
-    private boolean isCapture; // implement this so we can flag moves for catpures, and respond if they are played
+    private boolean isEmpassentCapture;
 
     public Move(int x1, int y1, int x2, int y2){
         this.startX = x1;
         this.startY = y1;
         this.endX = x2;
         this.endY = y2;
-        this.isCapture = false;
+        this.isEmpassentCapture = false;
     }
 
-    public Move(int x1, int y1, int x2, int y2, boolean capture){
+    public Move(int x1, int y1, int x2, int y2, boolean isEmpassentCapture){
         this.startX = x1;
         this.startY = y1;
         this.endX = x2;
         this.endY = y2;
-        this.isCapture = capture;
+        this.isEmpassentCapture = isEmpassentCapture;
     }
 
     /**
@@ -60,8 +60,8 @@ public class Move {
         return endY;
     }
 
-    public boolean getIsCapture(){
-        return isCapture;
+    public boolean getIsEmpassentCapture(){
+        return isEmpassentCapture;
     }
 
     @Override

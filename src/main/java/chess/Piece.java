@@ -57,6 +57,18 @@ public abstract class Piece {
         this.yPos = y;
     }
 
+    public void setHasMoved(boolean hasMoved){
+        // going to do nothing for pieces that dont require it, subclasses will override if they need to use this
+    }
+
+    public void setCanBeCapturedEmpassent(boolean canBeCapturedEmpassent){
+        // does nothing for anything except for pawns
+    }
+    public boolean canBeCapturedEmpassent(){
+        // does nothing for anything except for pawns
+        return false;
+    }
+
     // package private methods
 
     ArrayList<Move> getDirectionalMoves(Board gameBoard, int xDir, int yDir){
@@ -73,7 +85,7 @@ public abstract class Piece {
             } else {
                 //add the move into the piece we collided with if it is not your colour (a capture)
                 if (gameBoard.getColourAtSquare(x, y) != getColour()){
-                    directionMoves.add(new Move(getX(), getY(), x, y, true));
+                    directionMoves.add(new Move(getX(), getY(), x, y));
                 }
                 return directionMoves;
             }
@@ -83,7 +95,7 @@ public abstract class Piece {
         return directionMoves;
     }
     
-    public abstract ArrayList<Move> getLegalMoves(Board gameBoard);
+    public abstract ArrayList<Move> getLegalMoves(Board gameBoard, PieceColour colour);
 
 
 

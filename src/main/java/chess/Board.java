@@ -14,7 +14,7 @@ public class Board{
     public Board(){
         newBoard();
         initPosition(START_POS);
-        //initPosition("8/8/8/8/3n4/8/8/8");
+        //initPosition("8/8/8/8/3k4/8/8/8");
     }
 
     // private methods
@@ -69,6 +69,19 @@ public class Board{
 
         piece.setPosition(endX, endY);
 
+        if (piece.getType() == PieceType.PAWN){
+            piece.setHasMoved(true);
+            if (Math.abs(startX - endX) == 2){
+                piece.setCanBeCapturedEmpassent(true);
+            }
+            // If we just did an empassent move then we need to delete the captured pawn
+            if (Math.abs(startX - endX) == 1 && board[endX][startY].doesContainPiece()){
+                board[endX][startY].setPiece(null);
+                board[endX][startY].setContainsPiece(false);
+            }
+
+        }
+
         return true;
     }
 
@@ -93,9 +106,9 @@ public class Board{
         return true;
     }
 
-    public boolean moveIsLegal(Move move){
+    public boolean moveIsLegal(Move move, PieceColour colour){
 
-        return getSquare(move.getStartX(), move.getStartY()).moveIsLegal(move, this);
+        return getSquare(move.getStartX(), move.getStartY()).moveIsLegal(move, this, colour);
     }
 
     public void newBoard(){

@@ -57,9 +57,9 @@ public class Square {
         return piece.getColour();
     }
 
-    public boolean moveIsLegal(Move move, Board gameBoard){
+    public boolean moveIsLegal(Move move, Board gameBoard, PieceColour colour){
 
-        ArrayList<Move> legalMoves = piece.getLegalMoves(gameBoard);
+        ArrayList<Move> legalMoves = piece.getLegalMoves(gameBoard, colour);
 
         if (legalMoves.contains(move)){
             return true;
