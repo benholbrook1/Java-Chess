@@ -53,6 +53,10 @@ public class Square {
         return piece;
     }
 
+    public PieceColour getPieceColour(){
+        return piece.getColour();
+    }
+
     public boolean moveIsLegal(Move move, Board gameBoard){
 
         ArrayList<Move> legalMoves = piece.getLegalMoves(gameBoard);
@@ -85,10 +89,13 @@ public class Square {
         
         String returnString;
 
-        if (doesContainPiece()){
+        if (containsPiece){
             returnString = piece.toString();
         } else {
             returnString = " ";
+            if (doesContainPiece()){
+                returnString = "*";
+            }
         }        
 
         return returnString;

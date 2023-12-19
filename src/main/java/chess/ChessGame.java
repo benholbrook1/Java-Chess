@@ -34,8 +34,6 @@ public class ChessGame{
     
     public void makeMove(String moveString) throws Exception{ // GUI might need a different sort of method
 
-        // LEGAL MOVE = start square,endsquare
-
         Move move = new Move(moveString);
 
         if (board.moveIsLegal(move)){

@@ -12,7 +12,12 @@ public class Bishop extends Piece{
 
         ArrayList<Move> moves = new ArrayList<Move>();
 
-        // TODO
+        System.out.printf("Getting moves for bishop at [%d,%d]\n", getX(), getY());
+
+        moves = getDirectionalMoves(gameBoard, 1, 1);
+        moves.addAll(getDirectionalMoves(gameBoard, -1, -1));
+        moves.addAll(getDirectionalMoves(gameBoard, 1, -1));
+        moves.addAll(getDirectionalMoves(gameBoard, -1, 1));
 
         return moves;
     }

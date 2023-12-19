@@ -56,6 +56,32 @@ public abstract class Piece {
         this.xPos = x;
         this.yPos = y;
     }
+
+    // package private methods
+
+    ArrayList<Move> getDirectionalMoves(Board gameBoard, int xDir, int yDir){
+
+        ArrayList<Move> directionMoves = new ArrayList<>();
+
+        int x = getX() + xDir;
+        int y = getY() + yDir;
+
+        while(x >= 0 && x < 8 && y >= 0 && y < 8){
+
+            if (gameBoard.squareIsEmpty(x, y)){
+                directionMoves.add(new Move(getX(), getY(), x, y));
+            } else {
+                //add the move into the piece we collided with if it is not your colour (a capture)
+                if (gameBoard.getColourAtSquare(x, y) != getColour()){
+                    directionMoves.add(new Move(getX(), getY(), x, y, true));
+                }
+                return directionMoves;
+            }
+            x += xDir;
+            y += yDir;
+        }
+        return directionMoves;
+    }
     
     public abstract ArrayList<Move> getLegalMoves(Board gameBoard);
 

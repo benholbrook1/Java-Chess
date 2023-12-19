@@ -14,6 +14,7 @@ public class Board{
     public Board(){
         newBoard();
         initPosition(START_POS);
+        //initPosition("8/8/8/8/3n4/8/8/8");
     }
 
     // private methods
@@ -58,13 +59,15 @@ public class Board{
 
     public boolean movePiece(int startX, int startY, int endX, int endY){
 
-        // check if the move is legal using the [][].getValidMove... method of the piece
+        Piece piece = board[startX][startY].getPiece();
 
-        board[startX][startY].getPiece().setPosition(endX, endY);
+        board[startX][startY].setPiece(null);
+        board[startX][startY].setContainsPiece(false);
 
-        Square tempSquare = board[startX][startY];
-        board[startX][startY] = board[endX][endY];
-        board[endX][endY] = tempSquare;
+        board[endX][endY].setPiece(piece);
+        board[endX][endY].setContainsPiece(true);
+
+        piece.setPosition(endX, endY);
 
         return true;
     }
@@ -75,6 +78,19 @@ public class Board{
 
     public Square getSquare(int x, int y){
         return board[x][y];
+    }
+
+    public PieceColour getColourAtSquare(int x, int y){
+
+        return getSquare(x, y).getPieceColour();
+
+    }
+
+    public boolean squareIsEmpty(int x, int y){
+        if(board[x][y].doesContainPiece()){
+            return false;
+        }
+        return true;
     }
 
     public boolean moveIsLegal(Move move){
@@ -102,8 +118,8 @@ public class Board{
                 y++;
                 x = 0;
             } else if (Character.isDigit(c)){
-                x += c;
-            } else{
+                x += Character.getNumericValue(c);
+            } else if (Character.isLetter(c)){
                 addPiece(x,y,c);
                 x++;
             }

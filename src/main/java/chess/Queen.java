@@ -12,7 +12,15 @@ public class Queen extends Piece{
 
         ArrayList<Move> moves = new ArrayList<Move>();
 
-        // TO DO!
+        moves = getDirectionalMoves(gameBoard, 1, 1);
+        moves.addAll(getDirectionalMoves(gameBoard, -1, -1));
+        moves.addAll(getDirectionalMoves(gameBoard, 1, -1));
+        moves.addAll(getDirectionalMoves(gameBoard, -1, 1));
+
+        moves.addAll(getDirectionalMoves(gameBoard, 0, 1));
+        moves.addAll(getDirectionalMoves(gameBoard, 0, -1));
+        moves.addAll(getDirectionalMoves(gameBoard, 1, 0));
+        moves.addAll(getDirectionalMoves(gameBoard, -1, 0));
 
         return moves;
     }

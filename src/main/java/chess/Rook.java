@@ -10,12 +10,12 @@ public class Rook extends Piece{
     
     public ArrayList<Move> getLegalMoves(Board gameBoard){
 
-        ArrayList<Move> moves = new ArrayList<Move>();
+        ArrayList<Move> moves = new ArrayList<>();
 
-        int x = getX();
-        int y = getY();
-
-        
+        moves = getDirectionalMoves(gameBoard, 0, 1);
+        moves.addAll(getDirectionalMoves(gameBoard, 0, -1));
+        moves.addAll(getDirectionalMoves(gameBoard, 1, 0));
+        moves.addAll(getDirectionalMoves(gameBoard, -1, 0));
 
         return moves;
     }
