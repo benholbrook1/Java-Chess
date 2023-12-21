@@ -1,11 +1,24 @@
 package chess;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Knight extends Piece{
 
     public Knight(int x, int y, PieceColour p){
         super(x, y, PieceType.KNIGHT, p);
+    }
+
+    private Move addKnightHop(int xOffset, int yOffset, Board gameBoard, PieceColour currentColour){
+
+        if(getX() + xOffset < 8 && getX() + xOffset >= 0){
+            if (getY() + yOffset < 8 && getY() + yOffset >= 0){
+                if(!gameBoard.getSquare(getX() + xOffset, getY() + yOffset).doesContainOwnPiece(currentColour)){
+                    return new Move(getX(), getY(), getX() + xOffset, getY() + yOffset);
+                }
+            }
+        }
+        return null;
     }
 
     public ArrayList<Move> getLegalMoves(Board gameBoard, PieceColour currentColour){
@@ -16,14 +29,16 @@ public class Knight extends Piece{
             return moves;
         }
 
-        if(getX() + 1 < 8 && getY() - 2 >= 0) moves.add(new Move(getX(), getY(), getX() + 1, getY() - 2));
-        if(getX() - 1 >= 0 && getY() - 2 >= 0) moves.add(new Move(getX(), getY(), getX() - 1, getY() - 2));
-        if(getX() + 1 < 8 && getY() + 2 < 8) moves.add(new Move(getX(), getY(), getX() + 1, getY() + 2));
-        if(getX() - 1 >= 0 && getY() + 2 < 8) moves.add(new Move(getX(), getY(), getX() - 1, getY() + 2));
-        if(getX() + 2 < 8 && getY() - 1 >= 0) moves.add(new Move(getX(), getY(), getX() + 2, getY() - 1));
-        if(getX() + 2 < 8 && getY() + 1 < 8) moves.add(new Move(getX(), getY(), getX() + 2, getY() + 1));
-        if(getX() - 2 >= 0 && getY() - 1 >= 0) moves.add(new Move(getX(), getY(), getX() - 2, getY() - 1));
-        if(getX() - 2 >= 0 && getY() + 1 < 8) moves.add(new Move(getX(), getY(), getX() - 2, getY() + 1));
+        moves.add(addKnightHop(1,-2,gameBoard,currentColour));
+        moves.add(addKnightHop(-1,-2,gameBoard,currentColour));
+        moves.add(addKnightHop(1,2,gameBoard,currentColour));
+        moves.add(addKnightHop(-1,2,gameBoard,currentColour));
+        moves.add(addKnightHop(2,-1,gameBoard,currentColour));
+        moves.add(addKnightHop(2,1,gameBoard,currentColour));
+        moves.add(addKnightHop(-2,-1,gameBoard,currentColour));
+        moves.add(addKnightHop(-2,1,gameBoard,currentColour));
+
+        moves.removeIf(Objects::isNull); // clean up any of the return values as null
 
         return moves;
     }

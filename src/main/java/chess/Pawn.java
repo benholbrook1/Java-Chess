@@ -4,13 +4,18 @@ import java.util.ArrayList;
 
 public class Pawn extends Piece{
 
-    private boolean canBeCapturedEnpassent = false;
+    private boolean canBeCapturedEnpassent;
 
     public Pawn(int x, int y, PieceColour c){
         super(x, y, PieceType.PAWN, c);
+        canBeCapturedEnpassent = false;
     }
 
     // private methods
+
+    private boolean nextTwoSquaresAreEmpty(Board gameBoard, int direction){
+        return !gameBoard.getSquare(getX(), getY() +(1*direction)).doesContainPiece() && !gameBoard.getSquare(getX(), getY() +(2*direction)).doesContainPiece();
+    }
 
     private ArrayList<Move> generateMoves(Board gameBoard, int direction){
 
@@ -22,8 +27,9 @@ public class Pawn extends Piece{
         }
         // Double Initial Move
         if (!getHasMoved()){
-            moves.add(new Move(getX(), getY(), getX(), getY()+(2*direction)));
-            canBeCapturedEnpassent = true;
+            if (nextTwoSquaresAreEmpty(gameBoard, direction)){
+                moves.add(new Move(getX(), getY(), getX(), getY()+(2*direction)));
+            }
         }
         // Left Captures (Regular and Empassent)
         moves.addAll(addCaptures(gameBoard, direction, -1));
@@ -49,6 +55,7 @@ public class Pawn extends Piece{
             Square sideSquare = gameBoard.getSquare(getX() + xDir, getY());
             if(sideSquare.doesContainPiece() && sideSquare.getPiece().getType() == PieceType.PAWN){
                 if (sideSquare.getPiece().canBeCapturedEnpassent()){
+                    System.out.printf("Pawn at %d,%d can be captured enpassent\n", sideSquare.getX(), sideSquare.getY());
                     movesToAdd.add(new Move(getX(), getY(), getX() + xDir, getY() + (1 * yDir), true));
                 }
             }

@@ -79,7 +79,11 @@ public class Move {
 
     @Override
     public String toString(){
-        return "[" + startX + "," + startY + "]" + "->[" + endX + "," + endY + "]";
+
+
+
+
+        return "[" + String.valueOf((char)(startX + 65)) + (startY + 1) + "]" + "->[" + String.valueOf((char)(endX + 65)) + (endY + 1) + "]";
     }
     
 }

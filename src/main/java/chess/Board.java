@@ -12,7 +12,6 @@ public class Board implements Cloneable{
     // contstructors
 
     public Board(){
-        newBoard();
         initPosition(START_POS);
         //initPosition("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R");
     }
@@ -48,7 +47,7 @@ public class Board implements Cloneable{
         }
 
         if (colour == PieceColour.BLACK){
-            Character.toUpperCase(c);
+            c = Character.toUpperCase(c);
         }
 
         return c;
@@ -101,11 +100,11 @@ public class Board implements Cloneable{
         }
     }
 
-    private void updateIfEmpassent(int startX, int startY, int endX, Piece piece){
+    private void updateIfEmpassent(int startX, int startY, int endX, int endY, Piece piece){
 
         if (piece.getType() == PieceType.PAWN){
             resetEnpassents(); // reset all enpassent statuses for the pawns
-            if (Math.abs(startX - endX) == 2){
+            if (Math.abs(startY - endY) == 2){
                 piece.setCanBeCapturedEnpassent(true);
             }
             // If we just did an empassent move then we need to delete the captured pawn
@@ -159,7 +158,7 @@ public class Board implements Cloneable{
         piece.setPosition(endX, endY);
         piece.setHasMoved(true);
 
-        updateIfEmpassent(startX, startY, endX, piece);
+        updateIfEmpassent(startX, startY, endX, endY, piece);
         updateIfCastle(startX, endX, startY, endY, piece);
                 
     }
@@ -213,6 +212,8 @@ public class Board implements Cloneable{
         int x = 0;
         int y = 0;
 
+        newBoard();
+
         for (int i = 0; i < fenString.length(); i++){
             char c = fenString.charAt(i);
             if (c == '/'){
@@ -225,6 +226,47 @@ public class Board implements Cloneable{
                 x++;
             }
         }
+    }
+
+    public void initInfo(int[][] boardInfo){
+
+        for(int y = 0; y < 8; y++){
+            for(int x = 0; x < 8; x++){
+
+                int squareInfo = boardInfo[y][x];
+
+                if (squareInfo == 2){
+                    getPiece(x,y).setCanBeCapturedEnpassent(true);
+                    getPiece(x, y).setHasMoved(true);
+                } else if (squareInfo == 1){
+                    getPiece(x, y).setHasMoved(true);
+                }
+            }
+        }
+    }
+
+    public int[][] saveInfo(){
+
+        int[][] boardInfo = new int[8][8];
+
+        for(int y = 0; y < 8; y++){
+            for(int x = 0; x < 8; x++){
+
+                Square s = getSquare(x, y);
+
+                if (s.doesContainPiece()){
+
+                    Piece p = getPiece(x, y);
+
+                    if (p.canBeCapturedEnpassent()) boardInfo[y][x] = 2; 
+                    if (p.getHasMoved()) boardInfo[y][x] = 1;
+                    
+                }
+            }
+        }
+        
+
+        return boardInfo;
     }
 
     public String toFenString(){
@@ -241,11 +283,14 @@ public class Board implements Cloneable{
                 Square curSquare = getSquare(x,y);
 
                 if (curSquare.doesContainPiece()){
-                    if (emptyCounter != 0) sb.append(emptyCounter); // print the number of emptry squares before the piece
+                    if (emptyCounter != 0) {
+                        sb.append(emptyCounter); // print the number of emptry squares before the piece
+                        emptyCounter = 0;
+                    }
                     sb.append(getCharFromPiece(curSquare.getPiece()));
                 } else {
                     emptyCounter++;
-                    if (y == 7){
+                    if (x == 7){
                         sb.append(emptyCounter);
                     }
                 }

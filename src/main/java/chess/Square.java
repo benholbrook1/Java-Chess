@@ -84,6 +84,10 @@ public class Square {
         return new int[]{x,y};
     }
 
+    public boolean doesContainOwnPiece(PieceColour ownColour){
+        return containsPiece && getPieceColour() == ownColour;
+    }
+
     @Override
     public String toString(){
         
@@ -93,7 +97,7 @@ public class Square {
             returnString = piece.toString();
         } else {
             returnString = " ";
-            if (doesContainPiece()){
+            if (containsPiece){
                 returnString = "*";
             }
         }        
