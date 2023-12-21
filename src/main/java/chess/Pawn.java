@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 public class Pawn extends Piece{
 
-    private boolean hasMoved = false;
-    private boolean canBeCapturedEmpassent = false;
+    private boolean canBeCapturedEnpassent = false;
 
     public Pawn(int x, int y, PieceColour c){
         super(x, y, PieceType.PAWN, c);
@@ -22,49 +21,39 @@ public class Pawn extends Piece{
             moves.add(new Move(getX(), getY(), getX(), getY()+(1*direction)));
         }
         // Double Initial Move
-        if (!hasMoved){
+        if (!getHasMoved()){
             moves.add(new Move(getX(), getY(), getX(), getY()+(2*direction)));
-            canBeCapturedEmpassent = true;
+            canBeCapturedEnpassent = true;
         }
-
-        if (getX() + 1 < 8){
-            Square rightAttackedSquare = gameBoard.getSquare(getX() + 1, getY() + (1*direction));
-            // Right Capture
-            if (rightAttackedSquare.doesContainPiece() && rightAttackedSquare.getPieceColour() != getColour()){
-                moves.add(new Move(getX(), getY(), getX() + 1, getY() + (1 * direction)));
-            }
-            // Right Empassent Check
-            Square rSquare = gameBoard.getSquare(getX() + 1, getY());
-            if(rSquare.doesContainPiece() && rSquare.getPiece().getType() == PieceType.PAWN){
-                if (rSquare.getPiece().canBeCapturedEmpassent()){
-                    moves.add(new Move(getX(), getY(), getX() + 1, getY() + (1 * direction), true));
-                }
-            }
-        }
-        
-        if (getX() - 1 < 8){
-            Square leftAttackedSquare =  gameBoard.getSquare(getX() - 1, getY() + (1*direction));
-            // Left Capture
-            if (leftAttackedSquare.doesContainPiece() && leftAttackedSquare.getPieceColour() != getColour()){
-                moves.add(new Move(getX(), getY(), getX() - 1, getY() + (1 * direction)));
-            }
-            // Left Empassent Check
-            Square lSquare = gameBoard.getSquare(getX() - 1, getY());
-            if(lSquare.doesContainPiece() && lSquare.getPiece().getType() == PieceType.PAWN){
-                if (lSquare.getPiece().canBeCapturedEmpassent()){
-                    moves.add(new Move(getX(), getY(), getX() - 1, getY() + (1 * direction), true));
-                }
-            }
-        }
-
-
-        // TODO:
-        // --> REFACTOR THIS METHOD, IT IS WAYYY TOOO LOOONNNGGG
-        // --> EMPASSENT CAPTURES ARE INFINIETLY AVAILABLE, WE NEED TO RESET THE STATUS
-
-
+        // Left Captures (Regular and Empassent)
+        moves.addAll(addCaptures(gameBoard, direction, -1));
+        // Right Captures (Regular and Empassent)
+        moves.addAll(addCaptures(gameBoard, direction, 1));
 
         return moves;
+    }
+
+    private ArrayList<Move> addCaptures(Board gameBoard, int yDir, int xDir){
+
+        ArrayList<Move> movesToAdd = new ArrayList<>();
+
+        if (getX() + xDir >= 0 && getX() + xDir < 8){
+
+            // Regular Captures
+            Square attackedSquare = gameBoard.getSquare(getX() + xDir, getY() + (1*yDir));
+            if (attackedSquare.doesContainPiece() && attackedSquare.getPieceColour() != getColour()){
+                movesToAdd.add(new Move(getX(), getY(), getX() + xDir, getY() + (1 * yDir)));
+            }
+
+            // Enpassent
+            Square sideSquare = gameBoard.getSquare(getX() + xDir, getY());
+            if(sideSquare.doesContainPiece() && sideSquare.getPiece().getType() == PieceType.PAWN){
+                if (sideSquare.getPiece().canBeCapturedEnpassent()){
+                    movesToAdd.add(new Move(getX(), getY(), getX() + xDir, getY() + (1 * yDir), true));
+                }
+            }
+        }
+        return movesToAdd;
     }
 
     // public methods
@@ -88,19 +77,15 @@ public class Pawn extends Piece{
         return moves;
     }
 
-    public boolean canBeCapturedEmpassent(){
-        return canBeCapturedEmpassent;
+    public boolean canBeCapturedEnpassent(){
+        return canBeCapturedEnpassent;
     }
 
     @Override
-    public void setCanBeCapturedEmpassent(boolean canBeCapturedEmpassent){
-        this.canBeCapturedEmpassent = canBeCapturedEmpassent;
+    public void setCanBeCapturedEnpassent(boolean canBeCapturedEnpassent){
+        this.canBeCapturedEnpassent = canBeCapturedEnpassent;
     }
 
-    @Override
-    public void setHasMoved(boolean hasMoved){
-        this.hasMoved = hasMoved;
-    }
 
     @Override
     public String toString(){

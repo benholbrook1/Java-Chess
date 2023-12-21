@@ -8,6 +8,7 @@ public abstract class Piece {
     private int yPos;
     private PieceType type;
     private PieceColour colour;
+    private boolean hasMoved;
 
 
     public Piece(int x, int y, PieceType givenType, PieceColour givenColour){
@@ -15,6 +16,7 @@ public abstract class Piece {
         this.yPos = y;
         this.type = givenType;
         this.colour = givenColour;
+        this.hasMoved = false;
     }
 
     // private methods
@@ -32,6 +34,10 @@ public abstract class Piece {
 
     void setColour(PieceColour givenColour){
         colour = givenColour;
+    }
+
+    void setHasMoved(boolean givenHasMoved){
+        hasMoved = givenHasMoved;
     }
 
     // public methods
@@ -57,14 +63,15 @@ public abstract class Piece {
         this.yPos = y;
     }
 
-    public void setHasMoved(boolean hasMoved){
-        // going to do nothing for pieces that dont require it, subclasses will override if they need to use this
+    public boolean getHasMoved(){
+        return hasMoved;
     }
 
-    public void setCanBeCapturedEmpassent(boolean canBeCapturedEmpassent){
+
+    public void setCanBeCapturedEnpassent(boolean canBeCapturedEnpassent){
         // does nothing for anything except for pawns
     }
-    public boolean canBeCapturedEmpassent(){
+    public boolean canBeCapturedEnpassent(){
         // does nothing for anything except for pawns
         return false;
     }

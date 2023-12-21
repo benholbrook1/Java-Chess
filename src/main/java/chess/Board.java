@@ -1,6 +1,6 @@
 package chess;
 
-public class Board{
+public class Board implements Cloneable{
 
     public static final int BOARD_WIDTH = 8;
     public static final int BOARD_HEIGHT = 8;
@@ -14,10 +14,45 @@ public class Board{
     public Board(){
         newBoard();
         initPosition(START_POS);
-        //initPosition("8/8/8/8/3k4/8/8/8");
+        //initPosition("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R");
     }
 
     // private methods
+
+    private char getCharFromPiece(Piece piece){
+
+        char c = 'x'; // default dummy value 
+
+        PieceType type = piece.getType();
+        PieceColour colour = piece.getColour();
+
+        switch (type) {
+            case PAWN:
+                c = 'p';
+                break;
+            case ROOK:
+                c = 'r';
+                break;
+            case KNIGHT:
+                c = 'n';
+                break;
+            case BISHOP:
+                c = 'b';
+                break;
+            case KING:
+                c = 'k';
+                break;
+            case QUEEN:
+                c = 'q';
+                break;
+        }
+
+        if (colour == PieceColour.BLACK){
+            Character.toUpperCase(c);
+        }
+
+        return c;
+    }
 
     private void addPiece(int xPos, int yPos, char givenChar){
 
@@ -55,9 +90,63 @@ public class Board{
         }
     }
 
+    private void resetEnpassents(){
+
+        for(int i = 0; i < BOARD_WIDTH; i++){
+            for(int j = 0; j < BOARD_WIDTH; j++){
+                if(board[i][j].doesContainPiece() && board[i][j].getPiece().getType() == PieceType.PAWN){
+                    board[i][j].getPiece().setCanBeCapturedEnpassent(false);
+                }
+            }
+        }
+    }
+
+    private void updateIfEmpassent(int startX, int startY, int endX, Piece piece){
+
+        if (piece.getType() == PieceType.PAWN){
+            resetEnpassents(); // reset all enpassent statuses for the pawns
+            if (Math.abs(startX - endX) == 2){
+                piece.setCanBeCapturedEnpassent(true);
+            }
+            // If we just did an empassent move then we need to delete the captured pawn
+            if (Math.abs(startX - endX) == 1 && board[endX][startY].doesContainPiece()){
+                board[endX][startY].setPiece(null);
+                board[endX][startY].setContainsPiece(false);
+            }
+        } else {
+            resetEnpassents();
+        }
+    }
+
+    private void updateIfCastle(int startX, int endX, int startY, int endY, Piece piece){
+
+        // if the piece was a king and it just made a castle move we need to move the rook
+        if (piece.getType() == PieceType.KING){ // if the piece is a king
+            if (startX - endX == 2){ // if it was moved 2 squares to the left then its a castle move left
+                // Update the position of the rook
+                Piece rookToMove = board[0][startY].getPiece();
+
+                board[0][startY].setPiece(null);
+                board[0][startY].setContainsPiece(false);
+
+                board[endX + 1][endY].setPiece(rookToMove);
+                board[endX + 1][endY].setContainsPiece(true);
+            } else if (startX - endX == -2){ // castle move right
+                // Update the position of the rook
+                Piece rookToMove = board[7][startY].getPiece();
+
+                board[7][startY].setPiece(null);
+                board[7][startY].setContainsPiece(false);
+
+                board[endX - 1][endY].setPiece(rookToMove);
+                board[endX - 1][endY].setContainsPiece(true);
+            }
+        }
+    }
+
     // public methods
 
-    public boolean movePiece(int startX, int startY, int endX, int endY){
+    public void movePiece(int startX, int startY, int endX, int endY){
 
         Piece piece = board[startX][startY].getPiece();
 
@@ -68,21 +157,11 @@ public class Board{
         board[endX][endY].setContainsPiece(true);
 
         piece.setPosition(endX, endY);
+        piece.setHasMoved(true);
 
-        if (piece.getType() == PieceType.PAWN){
-            piece.setHasMoved(true);
-            if (Math.abs(startX - endX) == 2){
-                piece.setCanBeCapturedEmpassent(true);
-            }
-            // If we just did an empassent move then we need to delete the captured pawn
-            if (Math.abs(startX - endX) == 1 && board[endX][startY].doesContainPiece()){
-                board[endX][startY].setPiece(null);
-                board[endX][startY].setContainsPiece(false);
-            }
-
-        }
-
-        return true;
+        updateIfEmpassent(startX, startY, endX, piece);
+        updateIfCastle(startX, endX, startY, endY, piece);
+                
     }
 
     public Square[][] getBoard(){
@@ -91,6 +170,15 @@ public class Board{
 
     public Square getSquare(int x, int y){
         return board[x][y];
+    }
+
+    public Piece getPiece(int x, int y){
+        
+        if (getSquare(x, y).doesContainPiece()){
+            return getSquare(x, y).getPiece();
+        } else {
+            return null;
+        }
     }
 
     public PieceColour getColourAtSquare(int x, int y){
@@ -137,6 +225,33 @@ public class Board{
                 x++;
             }
         }
+    }
+
+    public String toFenString(){
+
+        StringBuilder sb = new StringBuilder();
+
+        for(int y = 0; y < 8; y++){
+
+            if (y != 0) sb.append('/');
+            
+            int emptyCounter = 0;
+            for(int x = 0; x < 8; x++){
+
+                Square curSquare = getSquare(x,y);
+
+                if (curSquare.doesContainPiece()){
+                    if (emptyCounter != 0) sb.append(emptyCounter); // print the number of emptry squares before the piece
+                    sb.append(getCharFromPiece(curSquare.getPiece()));
+                } else {
+                    emptyCounter++;
+                    if (y == 7){
+                        sb.append(emptyCounter);
+                    }
+                }
+            }
+        }
+        return sb.toString();
     }
 
     @Override
