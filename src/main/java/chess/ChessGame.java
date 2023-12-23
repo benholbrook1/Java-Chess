@@ -192,6 +192,17 @@ public class ChessGame{
         return legalMoves;
     }
 
+    public char getPieceAt(int x, int y){
+
+        Piece p = board.getPiece(x, y);
+
+        if (p == null){
+            return ' ';
+        } else {
+            return board.getCharFromPiece(p);
+        }
+    }
+
     @Override
     public String toString(){
         return board.toString();

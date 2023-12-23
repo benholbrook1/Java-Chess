@@ -18,7 +18,7 @@ public class Board implements Cloneable{
 
     // private methods
 
-    private char getCharFromPiece(Piece piece){
+    public char getCharFromPiece(Piece piece){
 
         char c = 'x'; // default dummy value 
 
