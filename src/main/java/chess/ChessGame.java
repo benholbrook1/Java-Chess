@@ -203,6 +203,10 @@ public class ChessGame{
         }
     }
 
+    public boolean squareContainsPiece(int x, int y){
+        return !board.squareIsEmpty(x, y);
+    }
+
     @Override
     public String toString(){
         return board.toString();
