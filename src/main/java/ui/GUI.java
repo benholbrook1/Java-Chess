@@ -8,13 +8,13 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import chess.ChessGame;
 
 public class GUI extends JFrame {
-
-    private int BOARD_WIDTH = 720;
-
     private ChessGame game;
     private JPanel gameScreen;
 
@@ -24,7 +24,7 @@ public class GUI extends JFrame {
 
         game = new ChessGame();
         setTitle("Java Chess Engine");
-        setSize(BOARD_WIDTH, 800);
+        setSize(720, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         gameScreen = new JPanel();
@@ -33,6 +33,8 @@ public class GUI extends JFrame {
         drawBoard();
 
         add(gameScreen);
+
+        addMouse();
 
     }
 
@@ -135,6 +137,63 @@ public class GUI extends JFrame {
             default:
                 break;
         }
+
+    }
+
+    private void addMouse(){
+
+        gameScreen.addMouseListener(new MouseListener() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                // unused
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e){
+                int xPos = e.getX() / 90;
+                int yPos = e.getY() / 100;
+
+                // get the component before we remove it
+
+                panels[yPos][xPos].removeAll();
+
+                gameScreen.revalidate();
+                gameScreen.repaint();
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e){
+                
+                // try to make the move, if it is legal, make it on the board otherwise snap back to old position
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e){
+                // unused
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e){
+                // unused
+            }
+        });
+
+        gameScreen.addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e){
+                
+                // draw the component with our mouse as we move it
+
+            }
+            @Override
+            public void mouseMoved(MouseEvent e){
+                // unused
+            }
+        });
+
 
     }
 
