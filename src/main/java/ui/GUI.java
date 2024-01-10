@@ -156,6 +156,8 @@ public class GUI extends JFrame {
 
                 // get the component before we remove it
 
+                // save the location of the square we picked it up from for when we attempt to make the move
+
                 panels[yPos][xPos].removeAll();
 
                 gameScreen.revalidate();
@@ -167,6 +169,16 @@ public class GUI extends JFrame {
             public void mouseReleased(MouseEvent e){
                 
                 // try to make the move, if it is legal, make it on the board otherwise snap back to old position
+
+                // Get pieces starting square
+
+                // Get the end square that we are trying to move the piece to
+
+                // Validate the move with the chess game instance
+
+                // If valid then make the move
+
+                // Else return the piece to original position
 
             }
 
