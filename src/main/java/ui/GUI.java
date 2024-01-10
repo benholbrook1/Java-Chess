@@ -10,7 +10,7 @@ public class GUI extends JFrame {
     public GUI() {
 
         setTitle("Java Chess Engine");
-        setSize(720, 800);
+        setSize(640, 668); // 28 extra pixels to account for the toolbar
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
