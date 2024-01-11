@@ -19,13 +19,19 @@ public class ChessScreen extends JPanel implements MouseMotionListener, MouseLis
     static int xOffset = +1;
     static int yOffset = -4;
 
+    static int xImageOffset = 40;
+    static int yImageOffset = 40;
+
+
     // Private Variables
     private ChessGame game;
 
     private int xPos = -1;
     private int yPos = -1;
-    private int newXPos;
-    private int newYPos;
+    private int endX;
+    private int endY;
+    private int mouseX;
+    private int mouseY;
 
 
     // Piece Images *loaded in the loadPieces() function*
@@ -126,16 +132,8 @@ public class ChessScreen extends JPanel implements MouseMotionListener, MouseLis
                 }
 
                 if (imageToDraw != null){
-                    if (xPos != -1 && xPos % tileSize == x && yPos != -1 && yPos % tileSize == (7 - y)){
-                        
-                        // this path is never being taken
-
-                        // if xPos and yPos != -1 then that means a piece has been selected, if that pieces is this piece we are drawing
-
-                        // then we need to draw it relative to our mouse... interesting
-
-                        // TO DO
-
+                    if (xPos != -1 && xPos / tileSize == x && yPos != -1 && yPos / tileSize == (7 - y)){
+                        g.drawImage(imageToDraw, mouseX + xOffset, mouseY + yOffset, this);
 
                     } else {
                         g.drawImage(imageToDraw, x * tileSize + xOffset, (7 - y) * tileSize + yOffset, this);
@@ -176,23 +174,38 @@ public class ChessScreen extends JPanel implements MouseMotionListener, MouseLis
             xPos = e.getX();
             yPos = e.getY();
 
-        }
+            mouseX = e.getX() - xImageOffset;
+            mouseY = e.getY() - yImageOffset;
 
+        }
+        repaint();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
 
+        endX = e.getX() / tileSize;
+        endY =  7 - (e.getY() / tileSize);
+
+        try{
+            game.makeMove(xPos / tileSize, 7 - (yPos / tileSize), endX, endY);
+        } catch (Exception ex){
+        }
+        xPos = -1;
+        yPos = -1;
+
+        repaint();
     }
 
     @Override 
     public void mouseDragged(MouseEvent e) {
 
+        mouseX = e.getX() - xImageOffset;
+        mouseY = e.getY() - yImageOffset;
+
+        repaint();
+
     }
-
-
-
-
 
     // Unused, implemeneted to avoid errors
     @Override

@@ -97,9 +97,52 @@ public class ChessGame{
     }
 
     
-    public void makeMove(String moveString) throws Exception{ // GUI might need a different sort of method
+    public void makeMove(String moveString) throws Exception{ // Used Specifically in the Text Based UI
 
         Move move = new Move(moveString);
+        if (board.moveIsLegal(move, currentColour)){
+
+            // make a copy of the board
+            String savedFen = board.toFenString();
+            int[][] savedInfo = board.saveInfo(); // saves pawns that can be enpassent captured, and if a rook, king, or pawn has moved
+            
+        
+            board.movePiece(move.getStartX(), move.getStartY(), move.getEndX(), move.getEndY());
+            switchCurrentColour();
+            
+            // generate all of opponent legal moves, if that includes a capture of the king, then mark it as not legal and set the board equal to the previous copy
+            ArrayList<Move> opponentLegalMoves = generateAllLegalMoves();
+            Square kingSquare = getKingSquare();
+
+            if (checkIfOpponentIsInCheckmate(opponentLegalMoves)){
+                System.out.println("Checkmate! You win!");
+                System.exit(0);
+            }
+
+        
+            for(Move legalMove: opponentLegalMoves){
+
+                
+
+                if (isKingCapture(legalMove, kingSquare)){
+                    
+                    // set our board back to before this move was played
+                    board.initPosition(savedFen);
+                    board.initInfo(savedInfo);
+
+                    switchCurrentColour(); // switch Colour Back
+                    throw new Exception();
+                }
+            }
+
+        } else {
+            throw new Exception();
+        }
+    }
+
+    public void makeMove(int startX, int startY, int endX, int endY) throws Exception{  // Used in the GUI
+
+        Move move = new Move(startX, startY, endX, endY);
         if (board.moveIsLegal(move, currentColour)){
 
             // make a copy of the board
