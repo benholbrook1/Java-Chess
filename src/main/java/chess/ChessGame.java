@@ -52,7 +52,6 @@ public class ChessGame{
                 board.initInfo(savedInfo);
                 switchCurrentColour();
 
-                System.out.printf("Opponent is not in checkmate, found legal move: %s\n", move.toString());
                 return false;
 
 
@@ -115,7 +114,6 @@ public class ChessGame{
             Square kingSquare = getKingSquare();
 
             if (checkIfOpponentIsInCheckmate(opponentLegalMoves)){
-                System.out.println("Checkmate! You win!");
                 System.exit(0);
             }
 
@@ -158,7 +156,6 @@ public class ChessGame{
             Square kingSquare = getKingSquare();
 
             if (checkIfOpponentIsInCheckmate(opponentLegalMoves)){
-                System.out.println("Checkmate! You win!");
                 System.exit(0);
             }
 
