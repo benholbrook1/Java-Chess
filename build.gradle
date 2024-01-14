@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    //id 'checkstyle'
 }
 
 
@@ -9,13 +8,6 @@ repositories {
     mavenCentral()
 }
 
-//this configuration allows builds to continue even if there are
-//checkstyle errors or warnings.
-// change true to false to make checkstyle force you to fix things
-// checkstyle {
-//   ignoreFailures = true
- 
-// }
 
 jar {
     manifest {
@@ -26,13 +18,6 @@ jar {
 
 
 
-//change the class name on line 25 to match
-task echo;
-
-echo.doFirst {
-    println "To run the program from jar:\njava -jar build/libs/TODO.jar"
-    println "To run the program from class files:\njava -cp build/classes/java/main ui.TextUI"
-}
 test {
     useJUnitPlatform()
 }
